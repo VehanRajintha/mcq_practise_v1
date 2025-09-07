@@ -1,7 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  experimental: {
+    // Disable turbopack to avoid WASM binding issues
+    turbo: {
+      root: process.cwd(),
+    },
+  },
 };
 
 export default nextConfig;
