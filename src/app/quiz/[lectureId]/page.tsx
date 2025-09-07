@@ -7,7 +7,7 @@ import { QuizQuestion } from '@/components/quiz/QuizQuestion';
 import { QuizProgress } from '@/components/quiz/QuizProgress';
 import { QuizResults } from '@/components/quiz/QuizResults';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, RotateCcw } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { QuizResult, QuizSession } from '@/types/mcq';
 
 export default function QuizPage() {

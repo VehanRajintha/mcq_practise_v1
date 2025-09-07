@@ -8,7 +8,6 @@ import { Badge } from '@/components/ui/badge';
 import { 
   BookOpen, 
   Home, 
-  Menu, 
   X, 
   ChevronRight,
   Users,
@@ -159,7 +158,6 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
                 const isExpanded = expandedModules.includes(module.id);
                 const completedLectures = module.lectures.filter(lecture => lecture.questions.length > 0).length;
                 const totalLectures = module.lectures.length;
-                const progress = totalLectures > 0 ? Math.round((completedLectures / totalLectures) * 100) : 0;
                 const hasActiveLecture = module.lectures.some(lecture => isLectureActive(lecture.id));
 
                 return (
