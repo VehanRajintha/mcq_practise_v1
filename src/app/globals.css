@@ -65,6 +65,41 @@ body {
   z-index: 50 !important;
 }
 
+/* Custom Scrollbar Styles */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: #3b82f6;
+  border-radius: 3px;
+  transition: background-color 0.2s ease;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background-color: #2563eb;
+}
+
+.scrollbar-thumb-blue-500::-webkit-scrollbar-thumb {
+  background-color: #3b82f6;
+}
+
+.scrollbar-track-transparent::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.hover\:scrollbar-thumb-blue-600:hover::-webkit-scrollbar-thumb {
+  background-color: #2563eb;
+}
+
 /* Mobile-specific improvements */
 @media (max-width: 640px) {
   .line-clamp-2 {

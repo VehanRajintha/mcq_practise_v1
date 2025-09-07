@@ -5,7 +5,7 @@ import { modules } from '@/data/modules';
 import { ModuleCard } from '@/components/modules/ModuleCard';
 import { LectureList } from '@/components/modules/LectureList';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, BookOpen } from 'lucide-react';
+import { ArrowLeft, BookOpen, Github } from 'lucide-react';
 
 export default function HomePage() {
   const [selectedModule, setSelectedModule] = useState<string | null>(null);
@@ -72,6 +72,21 @@ export default function HomePage() {
           />
         ))}
       </div>
+      
+      {/* Footer */}
+      <footer className="mt-12 sm:mt-16 pt-6 sm:pt-8 border-t border-gray-200">
+        <div className="flex items-center justify-start gap-2 text-sm text-gray-500">
+          <a 
+            href="https://github.com/VehanRajintha" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="hover:text-blue-600 transition-colors"
+          >
+            <Github className="h-4 w-4" />
+          </a>
+          <span>© 2025 MCQ Practice Platform. All rights reserved.</span>
+        </div>
+      </footer>
     </div>
   );
 }

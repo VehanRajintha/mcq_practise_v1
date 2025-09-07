@@ -13,7 +13,7 @@ export function Header({ onMenuClick }: HeaderProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <BookOpen className="h-5 w-5 text-blue-600" />
-          <span className="font-bold text-lg">MCQ Practice</span>
+          <span className="font-bold text-lg text-blue-600">MCQ Practice</span>
         </div>
         <Button
           variant="ghost"

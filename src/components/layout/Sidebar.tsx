@@ -103,7 +103,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
         <div className="relative flex items-center justify-between p-4 border-b border-white/20 bg-white/30 backdrop-blur-sm">
           <div className="flex items-center gap-2">
             <BookOpen className="h-6 w-6 text-blue-600 drop-shadow-sm" />
-            <span className="font-bold text-lg text-gray-800 drop-shadow-sm">MCQ Practice</span>
+            <span className="font-bold text-lg text-blue-600 drop-shadow-sm bg-white/20 px-3 py-1 rounded-lg">MCQ Practice</span>
           </div>
           <Button
             variant="ghost"
@@ -116,7 +116,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
         </div>
 
         {/* Navigation */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-transparent hover:scrollbar-thumb-blue-600">
           {/* Main Navigation */}
           <div className="p-4">
             <nav className="space-y-2">
@@ -242,7 +242,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
         {/* Footer */}
         <div className="border-t border-white/20 p-4 bg-white/20 backdrop-blur-sm">
           <div className="text-xs text-gray-600 text-center drop-shadow-sm">
-            MCQ Practice Platform v1.0
+            <span className="text-blue-600">MCQ Practice Platform v1.0</span>
           </div>
         </div>
       </aside>
