@@ -7,7 +7,7 @@ import { QuizQuestion } from '@/components/quiz/QuizQuestion';
 import { QuizProgress } from '@/components/quiz/QuizProgress';
 import { QuizResults } from '@/components/quiz/QuizResults';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
 import { QuizResult, QuizSession } from '@/types/mcq';
 
 export default function QuizPage() {
@@ -40,7 +40,19 @@ export default function QuizPage() {
   const handleAnswer = (result: QuizResult) => {
     if (!quizSession) return;
 
-    const newResults = [...quizSession.results, result];
+    // Check if this question was already answered
+    const existingResultIndex = quizSession.results.findIndex(r => r.questionId === result.questionId);
+    let newResults;
+    
+    if (existingResultIndex >= 0) {
+      // Update existing result
+      newResults = [...quizSession.results];
+      newResults[existingResultIndex] = result;
+    } else {
+      // Add new result
+      newResults = [...quizSession.results, result];
+    }
+    
     const correctCount = newResults.filter(r => r.isCorrect).length;
     
     setQuizSession({
@@ -50,18 +62,27 @@ export default function QuizPage() {
     });
 
     setShowResult(true);
-
-    // Auto-advance to next question after 3 seconds
-    setTimeout(() => {
-      if (currentQuestionIndex < quizSession.totalQuestions - 1) {
-        setCurrentQuestionIndex(prev => prev + 1);
-        setShowResult(false);
-      } else {
-        // Quiz completed
-        setQuizSession(prev => prev ? { ...prev, isCompleted: true } : null);
-      }
-    }, 3000);
   };
+
+  const handleNextQuestion = () => {
+    if (!quizSession) return;
+    
+    if (currentQuestionIndex < quizSession.totalQuestions - 1) {
+      setCurrentQuestionIndex(prev => prev + 1);
+      setShowResult(false);
+    } else {
+      // Quiz completed
+      setQuizSession(prev => prev ? { ...prev, isCompleted: true } : null);
+    }
+  };
+
+  const handlePreviousQuestion = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(prev => prev - 1);
+      setShowResult(false);
+    }
+  };
+
 
   const handleRestart = () => {
     setCurrentQuestionIndex(0);
@@ -112,9 +133,9 @@ export default function QuizPage() {
   }
 
   const currentQuestion = lecture.questions[currentQuestionIndex];
-  const currentResult = quizSession.results.find(r => r.questionId === currentQuestion.id);
+  const currentResult = quizSession?.results.find(r => r.questionId === currentQuestion.id);
 
-  if (quizSession.isCompleted) {
+  if (quizSession?.isCompleted) {
     return (
       <div className="container mx-auto px-4 py-2 sm:py-4">
         <div className="mb-4 sm:mb-6">
@@ -130,7 +151,7 @@ export default function QuizPage() {
           <p className="text-sm sm:text-base text-gray-600 mt-1">{lecture.description}</p>
         </div>
         <QuizResults 
-          results={quizSession.results} 
+          results={quizSession?.results || []} 
           onRestart={handleRestart}
         />
       </div>
@@ -155,8 +176,8 @@ export default function QuizPage() {
       <div className="space-y-4 sm:space-y-6">
         <QuizProgress 
           currentQuestion={currentQuestionIndex + 1}
-          totalQuestions={quizSession.totalQuestions}
-          correctAnswers={quizSession.score}
+          totalQuestions={quizSession?.totalQuestions || 0}
+          correctAnswers={quizSession?.score || 0}
         />
         
         <QuizQuestion
@@ -164,6 +185,11 @@ export default function QuizPage() {
           onAnswer={handleAnswer}
           showResult={showResult}
           result={currentResult}
+          onNext={handleNextQuestion}
+          onPrevious={handlePreviousQuestion}
+          canGoNext={currentQuestionIndex < (quizSession?.totalQuestions || 0) - 1}
+          canGoPrevious={currentQuestionIndex > 0}
+          isLastQuestion={currentQuestionIndex === (quizSession?.totalQuestions || 0) - 1}
         />
       </div>
     </div>

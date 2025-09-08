@@ -1,24 +1,51 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MCQQuestion, QuizResult } from '@/types/mcq';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import { CheckCircle, XCircle, AlertCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface QuizQuestionProps {
   question: MCQQuestion;
   onAnswer: (result: QuizResult) => void;
   showResult?: boolean;
   result?: QuizResult;
+  onNext?: () => void;
+  onPrevious?: () => void;
+  canGoNext?: boolean;
+  canGoPrevious?: boolean;
+  isLastQuestion?: boolean;
 }
 
-export function QuizQuestion({ question, onAnswer, showResult = false, result }: QuizQuestionProps) {
+export function QuizQuestion({ 
+  question, 
+  onAnswer, 
+  showResult = false, 
+  result,
+  onNext,
+  onPrevious,
+  canGoNext = false,
+  canGoPrevious = false,
+  isLastQuestion = false
+}: QuizQuestionProps) {
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
 
+  // Initialize selectedAnswers with previous result when available
+  useEffect(() => {
+    if (result && result.selectedAnswers) {
+      setSelectedAnswers(result.selectedAnswers);
+    } else {
+      setSelectedAnswers([]);
+    }
+  }, [result, question.id]);
+
+  // If there's a previous result, we should show the results
+  const shouldShowResult = showResult || (result !== undefined);
+
   const handleOptionClick = (optionId: string) => {
-    if (showResult) return;
+    if (shouldShowResult) return;
 
     if (question.type === 'single') {
       setSelectedAnswers([optionId]);
@@ -51,7 +78,7 @@ export function QuizQuestion({ question, onAnswer, showResult = false, result }:
   };
 
   const getOptionStyle = (optionId: string) => {
-    if (!showResult) {
+    if (!shouldShowResult) {
       return selectedAnswers.includes(optionId) 
         ? 'bg-blue-600 text-white border-blue-600' 
         : 'hover:bg-gray-100';
@@ -72,7 +99,7 @@ export function QuizQuestion({ question, onAnswer, showResult = false, result }:
   };
 
   const getOptionIcon = (optionId: string) => {
-    if (!showResult) return null;
+    if (!shouldShowResult) return null;
 
     const option = question.options.find(opt => opt.id === optionId);
     if (!option) return null;
@@ -90,12 +117,43 @@ export function QuizQuestion({ question, onAnswer, showResult = false, result }:
 
   return (
     <Card className="w-full max-w-4xl mx-auto">
+      {/* Navigation arrows at the top */}
+      <div className="flex justify-between items-center p-4 border-b border-gray-200">
+        <div className="flex gap-2">
+          {canGoPrevious && onPrevious && (
+            <Button 
+              variant="outline" 
+              onClick={onPrevious}
+              className="flex items-center gap-2 px-3 py-2"
+              size="sm"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              <span className="hidden sm:inline">Previous</span>
+            </Button>
+          )}
+        </div>
+        
+        <div className="flex gap-2">
+          {canGoNext && onNext && (
+            <Button 
+              variant="outline"
+              onClick={onNext}
+              className="flex items-center gap-2 px-3 py-2"
+              size="sm"
+            >
+              <span className="hidden sm:inline">{isLastQuestion ? 'Finish' : 'Next'}</span>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
+      </div>
+
       <CardHeader className="pb-3 sm:pb-6">
         <div className="flex flex-wrap items-center gap-2">
           <Badge variant={question.type === 'single' ? 'default' : 'secondary'} className="text-xs sm:text-sm">
             {question.type === 'single' ? 'Single Choice' : 'Multiple Choice'}
           </Badge>
-          {showResult && result && (
+          {shouldShowResult && result && (
             <Badge variant={result.isCorrect ? 'default' : 'destructive'} className="text-xs sm:text-sm">
               {result.isCorrect ? 'Correct' : 'Incorrect'}
             </Badge>
@@ -109,9 +167,9 @@ export function QuizQuestion({ question, onAnswer, showResult = false, result }:
             <button
               key={option.id}
               onClick={() => handleOptionClick(option.id)}
-              disabled={showResult}
+              disabled={shouldShowResult}
               className={`w-full p-3 sm:p-4 text-left border rounded-lg transition-colors touch-manipulation active:scale-95 ${getOptionStyle(option.id)} ${
-                showResult ? 'cursor-default' : 'cursor-pointer'
+                shouldShowResult ? 'cursor-default' : 'cursor-pointer'
               }`}
             >
               <div className="flex items-start gap-3">
@@ -123,7 +181,7 @@ export function QuizQuestion({ question, onAnswer, showResult = false, result }:
           ))}
         </div>
 
-        {!showResult && (
+        {!shouldShowResult && (
           <div className="flex justify-end pt-2">
             <Button 
               onClick={handleSubmit} 
@@ -135,7 +193,8 @@ export function QuizQuestion({ question, onAnswer, showResult = false, result }:
           </div>
         )}
 
-        {showResult && result && (
+
+        {shouldShowResult && result && (
           <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-gray-100 rounded-lg">
             <div className="flex items-start gap-2 sm:gap-3">
               <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600 mt-0.5 flex-shrink-0" />

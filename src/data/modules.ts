@@ -6,6 +6,7 @@ import { ainLecture4Questions } from './ain-lecture-4-questions';
 import { ainLecture5Questions } from './ain-lecture-5-questions';
 import { ainLecture6Questions } from './ain-lecture-6-questions';
 import { ainMockExamQuestions } from './ain-mock-exam-questions';
+import { osMockExamQuestions } from './os-mock-exam-questions';
 
 export const modules: Module[] = [
   {
@@ -70,7 +71,14 @@ export const modules: Module[] = [
     name: 'OS',
     fullName: 'Operating Systems',
     description: 'Operating system concepts, processes, and memory management',
-    lectures: []
+    lectures: [
+      {
+        id: 'os-mock-exam',
+        title: 'OS Comprehensive Mock Exam - 65 Questions',
+        description: 'Comprehensive mock exam covering OS concepts from Chapters 1-5: Introduction, OS Services, Processes, CPU Scheduling, and Process Synchronization',
+        questions: osMockExamQuestions
+      }
+    ]
   },
   {
     id: 'ps',
