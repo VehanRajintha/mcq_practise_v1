@@ -5,6 +5,7 @@ import { ainLecture3Questions } from './ain-lecture-3-questions';
 import { ainLecture4Questions } from './ain-lecture-4-questions';
 import { ainLecture5Questions } from './ain-lecture-5-questions';
 import { ainLecture6Questions } from './ain-lecture-6-questions';
+import { ainMockExamQuestions } from './ain-mock-exam-questions';
 
 export const modules: Module[] = [
   {
@@ -50,10 +51,10 @@ export const modules: Module[] = [
         questions: ainLecture6Questions
       },
       {
-        id: 'ain-lecture-7',
-        title: 'IPv6',
-        description: 'IPv6 addressing, configuration, and transition mechanisms',
-        questions: []
+        id: 'ain-mock-exam',
+        title: 'IE2040 Mock Exam - 60 Questions',
+        description: 'Comprehensive mock exam covering STP, VLANs, IPv6, OSPF, EtherChannel, FHRP, and Network Architecture',
+        questions: ainMockExamQuestions
       }
     ]
   },
