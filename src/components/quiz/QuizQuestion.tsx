@@ -17,6 +17,8 @@ interface QuizQuestionProps {
   canGoNext?: boolean;
   canGoPrevious?: boolean;
   isLastQuestion?: boolean;
+  onFinishQuiz?: () => void;
+  allQuestionsAnswered?: boolean;
 }
 
 export function QuizQuestion({ 
@@ -28,7 +30,9 @@ export function QuizQuestion({
   onPrevious,
   canGoNext = false,
   canGoPrevious = false,
-  isLastQuestion = false
+  isLastQuestion = false,
+  onFinishQuiz,
+  allQuestionsAnswered = false
 }: QuizQuestionProps) {
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
 
@@ -181,17 +185,28 @@ export function QuizQuestion({
           ))}
         </div>
 
-        {!shouldShowResult && (
-          <div className="flex justify-end pt-2">
-            <Button 
-              onClick={handleSubmit} 
-              disabled={selectedAnswers.length === 0}
-              className="min-w-24 text-sm sm:text-base"
-            >
-              Submit
-            </Button>
-          </div>
-        )}
+         {!shouldShowResult && (
+           <div className="flex justify-end pt-2">
+             <Button 
+               onClick={handleSubmit} 
+               disabled={selectedAnswers.length === 0}
+               className="min-w-24 text-sm sm:text-base"
+             >
+               Submit
+             </Button>
+           </div>
+         )}
+
+         {shouldShowResult && allQuestionsAnswered && onFinishQuiz && (
+           <div className="flex justify-center pt-4">
+             <Button 
+               onClick={onFinishQuiz}
+               className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 text-sm sm:text-base"
+             >
+               Finish Quiz
+             </Button>
+           </div>
+         )}
 
 
         {shouldShowResult && result && (

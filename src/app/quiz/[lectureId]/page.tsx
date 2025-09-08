@@ -55,13 +55,26 @@ export default function QuizPage() {
     
     const correctCount = newResults.filter(r => r.isCorrect).length;
     
-    setQuizSession({
+    const updatedSession = {
       ...quizSession,
       results: newResults,
       score: correctCount
-    });
-
+    };
+    
+    setQuizSession(updatedSession);
     setShowResult(true);
+
+    // Check if this was the last question and all questions are now answered
+    const lecture = modules
+      .flatMap(module => module.lectures)
+      .find(lecture => lecture.id === lectureId);
+    
+    if (lecture && newResults.length === lecture.questions.length) {
+      // All questions answered, complete the quiz
+      setTimeout(() => {
+        setQuizSession(prev => prev ? { ...prev, isCompleted: true } : null);
+      }, 2000); // Show result for 2 seconds before completing
+    }
   };
 
   const handleNextQuestion = () => {
@@ -71,8 +84,18 @@ export default function QuizPage() {
       setCurrentQuestionIndex(prev => prev + 1);
       setShowResult(false);
     } else {
-      // Quiz completed
-      setQuizSession(prev => prev ? { ...prev, isCompleted: true } : null);
+      // Quiz completed - only if current question is answered
+      const currentQuestion = modules
+        .flatMap(module => module.lectures)
+        .find(lecture => lecture.id === lectureId)?.questions[currentQuestionIndex];
+      
+      if (currentQuestion) {
+        const currentResult = quizSession.results.find(r => r.questionId === currentQuestion.id);
+        if (currentResult) {
+          // Current question is answered, complete the quiz
+          setQuizSession(prev => prev ? { ...prev, isCompleted: true } : null);
+        }
+      }
     }
   };
 
@@ -98,6 +121,10 @@ export default function QuizPage() {
 
   const handleBackToModules = () => {
     router.push('/');
+  };
+
+  const handleFinishQuiz = () => {
+    setQuizSession(prev => prev ? { ...prev, isCompleted: true } : null);
   };
 
   if (!quizSession) {
@@ -134,6 +161,7 @@ export default function QuizPage() {
 
   const currentQuestion = lecture.questions[currentQuestionIndex];
   const currentResult = quizSession?.results.find(r => r.questionId === currentQuestion.id);
+  const allQuestionsAnswered = quizSession?.results.length === lecture.questions.length;
 
   if (quizSession?.isCompleted) {
     return (
@@ -180,17 +208,19 @@ export default function QuizPage() {
           correctAnswers={quizSession?.score || 0}
         />
         
-        <QuizQuestion
-          question={currentQuestion}
-          onAnswer={handleAnswer}
-          showResult={showResult}
-          result={currentResult}
-          onNext={handleNextQuestion}
-          onPrevious={handlePreviousQuestion}
-          canGoNext={currentQuestionIndex < (quizSession?.totalQuestions || 0) - 1}
-          canGoPrevious={currentQuestionIndex > 0}
-          isLastQuestion={currentQuestionIndex === (quizSession?.totalQuestions || 0) - 1}
-        />
+         <QuizQuestion
+           question={currentQuestion}
+           onAnswer={handleAnswer}
+           showResult={showResult}
+           result={currentResult}
+           onNext={handleNextQuestion}
+           onPrevious={handlePreviousQuestion}
+           canGoNext={currentQuestionIndex < (quizSession?.totalQuestions || 0) - 1}
+           canGoPrevious={currentQuestionIndex > 0}
+           isLastQuestion={currentQuestionIndex === (quizSession?.totalQuestions || 0) - 1}
+           onFinishQuiz={handleFinishQuiz}
+           allQuestionsAnswered={allQuestionsAnswered}
+         />
       </div>
     </div>
   );
