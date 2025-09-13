@@ -7,6 +7,8 @@ import { ainLecture5Questions } from './ain-lecture-5-questions';
 import { ainLecture6Questions } from './ain-lecture-6-questions';
 import { ainMockExamQuestions } from './ain-mock-exam-questions';
 import { osMockExamQuestions } from './os-mock-exam-questions';
+import { csaMockExamQuestions } from './csa-mock-exam-questions';
+import { esMockExamQuestions } from './es-mock-exam-questions';
 
 export const modules: Module[] = [
   {
@@ -64,7 +66,14 @@ export const modules: Module[] = [
     name: 'CSA',
     fullName: 'Computer System Administration',
     description: 'System administration, server management, and network services',
-    lectures: []
+    lectures: [
+      {
+        id: 'csa-mock-exam',
+        title: 'CSA Comprehensive Mock Exam - 70 Questions',
+        description: 'Comprehensive mock exam covering UNIX/Linux Fundamentals, Virtualization, Network Servers, Regular Expressions, and System Concepts',
+        questions: csaMockExamQuestions
+      }
+    ]
   },
   {
     id: 'os',
@@ -92,6 +101,13 @@ export const modules: Module[] = [
     name: 'ES',
     fullName: 'Embedded Systems',
     description: 'Microcontrollers, embedded programming, and hardware interfaces',
-    lectures: []
+    lectures: [
+      {
+        id: 'es-mock-exam',
+        title: 'IE2070 Embedded Systems Mock Exam - 100 Questions',
+        description: 'Comprehensive mock exam covering Introduction to Embedded Systems, AVR Architecture and Assembly Programming, Jump/Call/Control Flow, Interrupts, and Advanced Concepts',
+        questions: esMockExamQuestions
+      }
+    ]
   }
 ];
